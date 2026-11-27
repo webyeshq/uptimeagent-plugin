@@ -1,0 +1,3 @@
+# The ChatGPT plugin package (scripts/build-openai-zip.sh)
+dist/
+.DS_Store

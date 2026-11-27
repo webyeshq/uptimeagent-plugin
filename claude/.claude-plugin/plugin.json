@@ -1,0 +1,18 @@
+{
+  "name": "uptimeagent",
+  "displayName": "UptimeAgent",
+  "version": "1.0.0",
+  "description": "See which of your monitored sites and APIs are up, what failed, and why: monitors, incidents and their evidence, from your assistant. Read-only.",
+  "author": {
+    "name": "Mozilor Limited",
+    "url": "https://uptimeagent.com"
+  },
+  "homepage": "https://uptimeagent.com",
+  "repository": "https://github.com/webyeshq/uptimeagent-plugin",
+  "license": "Apache-2.0",
+  "documentationUrl": "https://uptimeagent.com/docs",
+  "privacyPolicyUrl": "https://uptimeagent.com/privacy-policy",
+  "termsOfServiceUrl": "https://uptimeagent.com/terms-of-service",
+  "icon": "./assets/logo.png",
+  "keywords": ["uptime", "monitoring", "incidents", "status", "observability"]
+}
