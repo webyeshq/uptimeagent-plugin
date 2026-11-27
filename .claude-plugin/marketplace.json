@@ -1,0 +1,15 @@
+{
+  "name": "uptimeagent",
+  "description": "The UptimeAgent plugin: which of your monitored sites and APIs are up, what failed, and why, from your assistant.",
+  "owner": {
+    "name": "Mozilor Limited",
+    "url": "https://uptimeagent.com"
+  },
+  "plugins": [
+    {
+      "name": "uptimeagent",
+      "source": "./",
+      "description": "See which of your monitored sites and APIs are up, what failed, and why: monitors, incidents and their evidence, from your assistant. Read-only."
+    }
+  ]
+}
