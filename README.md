@@ -1,66 +1,56 @@
-# UptimeAgent
+# UptimeAgent plugins for Claude and ChatGPT
 
-UptimeAgent watches your websites and APIs from several regions and opens an incident when one
-fails. This plugin connects your assistant to your UptimeAgent account, so you can ask which sites
-are up, what failed and why, without leaving the conversation.
+[UptimeAgent](https://uptimeagent.com) watches your websites and APIs from several regions and
+opens an incident when one fails. These plugins connect your assistant to your UptimeAgent
+account, so you can ask which sites are up, what failed and why, without leaving the
+conversation. Every tool is read-only.
 
-## What you can ask
+| Folder | What it is | Where you get it |
+|---|---|---|
+| [`claude/`](claude) | The Claude plugin: manifest, server pointer, the `investigate-incident` skill and logo | Claude's plugin directory, or Claude Code straight from this repository |
+| [`openai/`](openai) | The ChatGPT plugin's manifests, packed with `claude/`'s skill, README, licence and logo | ChatGPT's plugin directory |
 
-- "Which of my sites are down right now?"
-- "What caused INC-0042?" or "Why did my latest alert fire?"
-- "How has api.example.com responded over the last 7 days?"
-- "My site blocks your checks. Which addresses should I allowlist?"
-- "Are my server logs reaching UptimeAgent?"
+Both plugins point your assistant at one remote server, `https://mcp.uptimeagent.com/mcp`, and run
+no code on your machine. [claude/README.md](claude/README.md) says what you can ask, how sign-in
+works, and what the plugin reads and records.
 
-The plugin's `investigate-incident` skill walks the assistant through an incident's details,
-evidence, application errors and check history, and asks it to explain the likely cause from that
-evidence.
+## Install
 
-## Getting started
+- **Claude and ChatGPT:** from your assistant's plugin directory.
+- **Claude Code**, straight from this repository:
 
-1. Install the plugin from your assistant's plugin directory. In Claude Code you can also install
-   it straight from this repository:
+  ```
+  /plugin marketplace add webyeshq/uptimeagent-plugin
+  /plugin install uptimeagent@uptimeagent
+  ```
+
+You need an UptimeAgent account with at least one monitor.
+
+## Releasing a new version
+
+1. On a branch, make the change and raise `version` in both `claude/.claude-plugin/plugin.json`
+   and `openai/plugin.json`. The directories publish a new version only when it rises, and the two
+   stay equal.
+2. Check the Claude plugin and the marketplace:
 
    ```
-   /plugin install uptimeagent --marketplace webyeshq/uptimeagent-plugin
+   claude plugin validate claude --profile directory
+   claude plugin validate .
    ```
 
-2. Sign in with your UptimeAgent account when your assistant asks, and approve the access on the
-   consent page.
-3. If you belong to more than one workspace, name the one you mean, or the assistant will ask.
+3. Open a pull request into `main`. A repository admin merges it and tags `vX.Y.Z`.
+4. Claude's directory picks the new version up and a reviewer publishes it. For ChatGPT, run
+   `scripts/build-openai-zip.sh` and upload `dist/uptimeagent-openai.zip` at
+   platform.openai.com/plugins.
 
-You need an UptimeAgent account with at least one monitor: [uptimeagent.com](https://uptimeagent.com).
+Keep the repository plain: no GitHub Actions, Git LFS, submodules, symlinks, `.gitattributes`
+export rules or `.DS_Store` files. Claude's directory refuses or holds a plugin that has them.
 
-## What it connects to and what it sends
-
-The plugin runs no code on your machine. It points your assistant at one remote server,
-`https://mcp.uptimeagent.com/mcp`, and nothing else.
-
-- **Sign-in:** OAuth through your UptimeAgent account. The assistant gets a token that can only
-  read; it never sees your password.
-- **What the assistant can read**, from the workspace you choose: monitors and their state,
-  incidents and their analysis, check results per region, the HTTP request and response captured at
-  an incident, TLS and DNS details, your server log lines and application errors around an incident,
-  webhook delivery records, response-time trends, and your account's name, email, workspaces and
-  roles.
-- **What it can change:** nothing. Every tool is read-only.
-- **What we record:** for each request, the IP address it came from. For each tool call, the tool,
-  time, outcome and workspace, your account's identifier, and which assistant and OAuth client
-  made the call. Usage analytics record your account's identifier, the assistant, its client name
-  and user agent, and the same call details. Neither ever records a tool's inputs or results, and
-  analytics never record hostnames or emails. See the
-  [privacy policy](https://uptimeagent.com/privacy-policy).
-
-What you send to your assistant, and what it does with the answers, is governed by your
-assistant provider's terms.
-
-## Support
-
-Documentation: [uptimeagent.com/docs](https://uptimeagent.com/docs). Privacy and data requests:
-support@uptimeagent.com.
+The `investigate-incident` skill repeats the server's `investigate_incident` prompt, and the
+ChatGPT review cases name the server's tools. Change them when the server changes.
 
 ## Licence
 
-Copyright 2026 Mozilor Limited. The files in this plugin are licensed under the
+Copyright 2026 Mozilor Limited. The files in this repository are licensed under the
 [Apache License 2.0](LICENSE). The licence covers these files only, not the UptimeAgent service,
 and grants no rights to the UptimeAgent name or logo.

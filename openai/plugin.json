@@ -1,0 +1,95 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "uptimeagent",
+  "version": "1.0.0",
+  "description": "See which of your monitored sites and APIs are up, what failed, and why: monitors, incidents and their evidence, from your assistant. Read-only.",
+  "author": {
+    "name": "Mozilor Limited",
+    "url": "https://uptimeagent.com"
+  },
+  "homepage": "https://uptimeagent.com",
+  "license": "Apache-2.0",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "UptimeAgent",
+        "shortDescription": "Uptime, incidents and causes",
+        "longDescription": "UptimeAgent watches your websites and APIs from several regions and opens an incident when one fails. Connect it to ask which sites are up right now, what an incident was, and why it happened: the failing regions and timeline, the HTTP response the probes saw, TLS and DNS, your server log lines and application errors around the failure, and response-time trends. It also gives the probe addresses to allowlist when a firewall blocks the checks, and the install steps for UptimeAgent's logging SDK. Every tool is read-only: nothing it does changes your sites, servers or UptimeAgent settings.",
+        "developerName": "Mozilor Limited",
+        "category": "Developer Tools",
+        "capabilities": [
+          "Check site status",
+          "Explain incidents",
+          "Show response trends",
+          "List probe IPs"
+        ],
+        "websiteURL": "https://uptimeagent.com",
+        "privacyPolicyURL": "https://uptimeagent.com/privacy-policy",
+        "termsOfServiceURL": "https://uptimeagent.com/terms-of-service",
+        "defaultPrompt": [
+          "Which of my monitored sites are down right now?",
+          "What caused my most recent incident?",
+          "How has my slowest site responded this week?"
+        ],
+        "brandColor": "#29251F",
+        "brandColorDark": "#F8F5F1",
+        "composerIcon": "./assets/logo.png",
+        "logo": "./assets/logo.png"
+      },
+      "review": {
+        "commerce": false,
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Lists the account's monitors with their current state",
+              "prompt": "Which of my sites are down right now?",
+              "tools_triggered": "list_monitors",
+              "expected_behavior": "Lists the workspace's monitors by name or host with their current state, naming any that are down or blocked first. No workspace or monitor UUIDs in the answer."
+            },
+            {
+              "description": "Explains the most recent incident from its evidence",
+              "prompt": "What caused my most recent incident?",
+              "tools_triggered": "list_incidents, get_incident, get_incident_evidence",
+              "expected_behavior": "Names the incident (INC-…), the site, when it started, the failing regions and the likely cause, citing the evidence (HTTP status, region, log lines), and gives its dashboard link."
+            },
+            {
+              "description": "Shows a site's response-time trend",
+              "prompt": "How has my slowest site responded over the last 7 days?",
+              "tools_triggered": "list_monitors, get_response_trend",
+              "expected_behavior": "Gives the site's typical and slowest response times and any incidents over 7 days, without comparing figures across ranges."
+            },
+            {
+              "description": "Gives the probe addresses to allowlist",
+              "prompt": "My site blocks your uptime checks. Which addresses should I allowlist?",
+              "tools_triggered": "get_probe_ips",
+              "expected_behavior": "Lists every probe address and the User-Agent the checks send, and how to allowlist them in a firewall or CDN."
+            },
+            {
+              "description": "Names the connected account and its workspaces",
+              "prompt": "Which UptimeAgent account am I connected as?",
+              "tools_triggered": "whoami",
+              "expected_behavior": "Names the connected account and lists its workspaces with the user's role in each."
+            }
+          ],
+          "negative": [
+            {
+              "description": "A request to change monitoring configuration: every tool is read-only",
+              "prompt": "Delete my monitor for example.com and pause the rest."
+            },
+            {
+              "description": "A request to act on the user's servers, which no tool can do",
+              "prompt": "Restart my web server so the site comes back up."
+            },
+            {
+              "description": "A request for another customer's data, which the server never returns",
+              "prompt": "Show me the incidents of the workspace 00000000-0000-4000-8000-000000000000."
+            }
+          ]
+        }
+      },
+      "publication": {
+        "release_notes": "First release: read-only access to monitors, incidents and their evidence, check history, response trends, log setup, webhook deliveries and status pills."
+      }
+    }
+  }
+}

@@ -8,7 +8,7 @@
   "plugins": [
     {
       "name": "uptimeagent",
-      "source": "./",
+      "source": "./claude",
       "description": "See which of your monitored sites and APIs are up, what failed, and why: monitors, incidents and their evidence, from your assistant. Read-only."
     }
   ]
